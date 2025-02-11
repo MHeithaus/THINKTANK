@@ -1,0 +1,61 @@
+def EEG_Implement(EEG_raw, RecordedColumns = 32, Channels = 16, Timestep = 256):
+    """
+
+    Parameters
+    ----------
+    EEG_raw : string
+        path of EEG file in users directory
+    RecordedColumns : Int
+        number of total columns in text document uploaded --
+        16 channels + ~15 dead lines + 1 time line
+        Default is 32
+    Channels : Int
+        numer of 
+    
+    Timestep : Int
+        timestep used between electrode measurements, 1/(Timestep) seconds
+        is measurement time used
+        Default is 256
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    EEG_access = open(EEG_raw, 'r') #reads EEG path, calls for access
+    EEG_access = EEG_access.read() 
+    EEG_access = EEG_access.split() #creates large list for later separation
+    
+    EEG_use = [[] for A in range(RecordedColumns)] #recording location
+    
+    lenCheck = 0
+    while (lenCheck*(RecordedColumns))<len(EEG_access): #indices over all values in text file
+        
+        for EEG_throughput in range(RecordedColumns):
+            EEG_use[EEG_throughput].append(EEG_access[EEG_throughput+lenCheck*(RecordedColumns)])
+            #This code could be optimized by skipping over unused columns rather than deleting at the end of sequence
+            
+        lenCheck=lenCheck+1
+    
+    EEG_use[(Channels+1):(RecordedColumns+1)] = []
+    """
+    for EEG_int in range(Channels):
+        EEG_use[EEG_int] = [float(item) for item in EEG_use[EEG_int]]
+    
+    #This was the original plan to limit processing, but the way the txt file imports strings
+    #leads to python not recognizing them as floats for subtraction operands
+    """
+    EEG_Delta = [[] for A in range(Channels)]
+
+    for EEGList in range(Channels):
+        for DeltaList in range(len(EEG_use[0])+-1):
+            BandAid = float((EEG_use[EEGList+1][DeltaList])[1:]) #This is a HORRIBLE solution, it wont recognize subtraction as an operation between floats
+            NexCare = float((EEG_use[EEGList+1][DeltaList+1])[1:]) #If EEG has positive outputs this will fail
+            Curad = NexCare-BandAid
+            EEG_Delta[EEGList].append(Curad)
+        
+            
+    
+    return [EEG_Delta,EEG_use[0][1:]] #returns list of deltas
+    
