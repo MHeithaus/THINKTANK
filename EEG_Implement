@@ -29,6 +29,7 @@ def EEG_Implement(EEG_raw, RecordedColumns = 32, Channels = 16, Timestep = 256):
 
     """
     
+      
     EEG_access = open(EEG_raw, 'r') #reads EEG path, calls for access
     EEG_access = EEG_access.read() 
     EEG_access = EEG_access.split() #creates large list for later separation
@@ -45,22 +46,22 @@ def EEG_Implement(EEG_raw, RecordedColumns = 32, Channels = 16, Timestep = 256):
         lenCheck=lenCheck+1
     
     EEG_use[(Channels+1):(RecordedColumns+1)] = []
-    """
-    for EEG_int in range(Channels):
-        EEG_use[EEG_int] = [float(item) for item in EEG_use[EEG_int]]
     
-    #This was the original plan to limit processing, but the way the txt file imports strings
-    #leads to python not recognizing them as floats for subtraction operands
-    """
+    #These loops determine the average EEG value for a given channel
+    EEG_Avg = np.zeros(Channels)
+    for EEG_AvgCol in range(Channels):
+        for EEG_AvgRow in range(len(EEG_use[0])):
+            EEG_Avg[EEG_AvgCol]+=float(EEG_use[EEG_AvgCol+1][EEG_AvgRow])
+        EEG_Avg[EEG_AvgCol] = EEG_Avg[EEG_AvgCol]/(len(EEG_use[0]))
+
+    
+    #Creates an empty list of lists to fill with the difference in EEG reading from average
     EEG_Delta = [[] for A in range(Channels)]
 
+    #This sequence determines the difference of a given EEG reading from average reading from that channel
     for EEGList in range(Channels):
         for DeltaList in range(len(EEG_use[0])+-1):
-            BandAid = float((EEG_use[EEGList+1][DeltaList])[1:]) #This is a HORRIBLE solution, it wont recognize subtraction as an operation between floats
-            NexCare = float((EEG_use[EEGList+1][DeltaList+1])[1:]) #If EEG has positive outputs this will fail
-            Curad = NexCare-BandAid
-            EEG_Delta[EEGList].append(Curad)
-        
+            EEG_Delta[EEGList].append(float(EEG_use[EEGList+1][DeltaList])-EEG_Avg[EEGList])
             
     
     return [EEG_Delta,EEG_use[0][1:]] #returns list of deltas
