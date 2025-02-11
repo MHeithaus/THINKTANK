@@ -1,0 +1,49 @@
+def EEG_Transmute(EEG_Delta, EEG_Time):
+    
+    #Variable Definitions:
+        #These are defined in the Rothman papers, can be added as function parameters if necessary
+        
+    CBF = 1 #Cerebral Blood Flow
+    
+    OEF = 1 #Oxygen Extraction Fraction
+    
+    OEF0 = 0.42 #Oxygen Extraction Fraction at resting
+    
+    C_O2_A = 6.9 #Arteriole Blood Oxygen Concentration, mmol/L
+    
+    C_CO2_A = 21.6 #Arteriole Blood CO2 Concentration, mmol/L
+    
+    C_Glyc_A = 5.55 #Arterial glucose concentration, mmol/L
+    
+    CF = 0.14 #Correction factor
+    
+    HC = 0.33 #Haldane constant
+    
+    BC = 26.0 #Buffering Capacity constant
+    
+    Rglyc = 3.1 #Ratio of non-Oxidative glycolysis and oxidative metabolism
+    
+    n=2.28 #NVC constant
+    
+    pHA = 7.4 #Arteriole Blood Plasma pH
+    
+    pHV = 1.0 #Vascular Blood Plasma pH - THIS MIGHT BE EEG DEPENDENT - BE READY TO MOVE
+    
+    
+    #Application of Equations:
+        
+    #EQ1 - S1
+    CMRO2 = CBF*(C_O2_A)*OEF #Cerebral Metabolic Rate of Oxygen
+    
+    #EQ21 - S2
+    D_CMRO2 = CMRO2*(3*(pHV-pHA/((1/BC)*C_O2_A*OEF*Rglyc))-3*((1-HC)*(1-CF))/Rglyc)     
+    
+    #EQ13 - Determine Lactate Proton Change
+    D_C_H_AV_L = D_CMRO2/(CBF*3/Rglyc)
+        
+    #EQ16 - Determine Hemoglobin Proton Change
+    D_C_H_AV_H = (1-HC)*C_O2_A*OEF
+    
+    #EQ11 - Determine Bicarbonate Proton Change
+    D_C_H_AV_BC = (1-HC)*C_O2_A*OEF #Equivalent, likely need change in HC
+        
