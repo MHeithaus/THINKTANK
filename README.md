@@ -1,5 +1,7 @@
 # THINKTANK
+
 Contains functions utilized for the THINKTANK team for application in neural chemical modeling.
+
 ----------------------------------------------------------------------------------------------------------------------------------
 THINKTANK CAPSTONE TEAM:
 
@@ -24,5 +26,7 @@ THINKTANK PROJECT DESCRIPTION:
 
 ----------------------------------------------------------------------------------------------------------------------------------
 THINKTANK PROJECT PURPOSE:
+
 *EEG file inputs were conducted to research the resulting brain chemistry shifts from verbal stimuli for the purpose of correlating brain nutrient concentrations to neural activity and thought. 
+
 *The THINKTANK project creates the framework for returning neural chemical composition throughout the full brain at mid-low error from EEG data recorded using the 10-20 internation system for electrode placement
