@@ -3,9 +3,9 @@ def EEG_Transmute(EEG_Delta, EEG_Time):
     #Variable Definitions:
         #These are defined in the Rothman papers, can be added as function parameters if necessary
         
-    CBF = 1 #Cerebral Blood Flow
+    CBF = 1 #Cerebral Blood Flow - Placeholder Value
     
-    OEF = 1 #Oxygen Extraction Fraction
+    OEF = 1 #Oxygen Extraction Fraction - Placeholder Value
     
     OEF0 = 0.42 #Oxygen Extraction Fraction at resting
     
@@ -29,14 +29,18 @@ def EEG_Transmute(EEG_Delta, EEG_Time):
     
     pHV = 1.0 #Vascular Blood Plasma pH - THIS MIGHT BE EEG DEPENDENT - BE READY TO MOVE
     
+
     
     #Application of Equations:
         
     #EQ1 - S1
     CMRO2 = CBF*(C_O2_A)*OEF #Cerebral Metabolic Rate of Oxygen
     
+    D_CMRO2 = 0.2*CMRO2 #Relation given by Rothman
+    
     #EQ21 - S2
-    D_CMRO2 = CMRO2*(3*(pHV-pHA/((1/BC)*C_O2_A*OEF*Rglyc))-3*((1-HC)*(1-CF))/Rglyc)     
+    
+    pHV = ((D_CMRO2/CMRO2)+3*((1-HC)*(1-CF))/Rglyc)/(3/((1/BC)*C_O2_A*OEF*Rglyc)) + pHA    
     
     #EQ13 - Determine Lactate Proton Change
     D_C_H_AV_L = D_CMRO2/(CBF*3/Rglyc)
