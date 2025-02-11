@@ -4,7 +4,7 @@ def EEG_Implement(EEG_raw, RecordedColumns = 32, Channels = 16, Timestep = 256):
     Parameters
     ----------
     EEG_raw : string
-        path of EEG file in users directory
+        path of EEG file in users directory (Example: '/Users/mason/Downloads/DLR_3.txt')
     RecordedColumns : Int
         number of total columns in text document uploaded --
         16 channels + ~15 dead lines + 1 time line
@@ -19,7 +19,13 @@ def EEG_Implement(EEG_raw, RecordedColumns = 32, Channels = 16, Timestep = 256):
 
     Returns
     -------
-    None.
+    EEG_Delta: list
+        compiled delta values of each of the 16 channels, organized based on timestep, associated channel
+        is found in each element (Example: Channel 1 data = EEG_Delta[0], CHannel 2 data = EEG_Delta[1] ...)
+
+    EEG_use[0][1:]: list
+        timestep for each individual value within the EEG_Delta list, time at each individual value correlates
+        directly with the delta measurement in each of the 16 channels at that position
 
     """
     
