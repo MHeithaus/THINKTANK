@@ -1,4 +1,19 @@
 def EEG_Transmute(EEG_Delta, EEG_Time):
+    """
+
+    Parameters
+    ----------
+    EEG_Delta: list
+        Contains values for all differences in EEG readings from average at that channel
+        
+    EEG_Time: list
+        Contains values for each individual timestep, aligned with EEG delta at a given position
+    
+    Returns
+    -------
+    TBD
+    
+    """
     
     #Variable Definitions:
         #These are defined in the Rothman papers, can be added as function parameters if necessary
@@ -32,7 +47,9 @@ def EEG_Transmute(EEG_Delta, EEG_Time):
 
     
     #Application of Equations:
-        
+
+    # -- NEEDED -- Correlation between CMRO2 and EEG_Delta inputs, normalized.
+
     #EQ1 - S1
     CMRO2 = CBF*(C_O2_A)*OEF #Cerebral Metabolic Rate of Oxygen
     
@@ -50,4 +67,5 @@ def EEG_Transmute(EEG_Delta, EEG_Time):
     
     #EQ11 - Determine Bicarbonate Proton Change
     D_C_H_AV_BC = (1-HC)*C_O2_A*OEF #Equivalent, likely need change in HC
-        
+
+    # -- NEEDED -- Application of additional Equations -- To do after CMRO2:EEG correlation is added
