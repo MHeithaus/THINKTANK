@@ -119,7 +119,7 @@ def EEG_Implement(EEG_raw, RecordedColumns = 32, Channels = 16, Timestep = 256,
     return [EEG_Dict, EEG_Med, EEG_Delta,EEG_Time] #returns list of deltas and associated times for each trial
     
 if __name__ == '__main__':
-    ExampleCase = EEG_Implement('/Users/mason/Downloads/DLR_3_1.txt')
+    ExampleCase = EEG_Implement('/Users/mason/Downloads/Example_EEG.txt')
     #Copy the path of the EEG file and input it. Make sure the data is COMPLETE, IE: 1-512 timesteps of each trial is recorded in order
     #See "Example_EEG" to see how this should be set up
 
