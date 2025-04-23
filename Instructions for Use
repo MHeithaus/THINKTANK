@@ -1,0 +1,48 @@
+INSTRUCTIONS OF USE:
+
+This document will be used as a How-to for the functions included in this system and will include the code we used to return our outputs for the report and presentation.
+
+All functions are used semi-linearly, one defining another besides the distancefunction which is used within.
+The load order should be --
+
+DistanceFunc -1
+EEG_Implement_Welch -2
+EEG_NormalizedGamma_CMRO2 -3
+EEG_NeurovascularVariables -4
+EEG_Plotting -5
+
+Calls should be made with this order in mind, as the flow of inputs and outputs follows:
+raw EEG file --> EEG_Implement_Welch, returns Welch Spectra and Trials --> EEG_NormalizedGamma_CMRO2, returns WelchPoints --> EEG_NeurovascularVariables, returns Data Dictionarys --> EEG_Plotting
+
+DistanceFunc is used by EEG_Plotting and is thus outside of load order.
+
+
+Sample Use Code:
+Below is our main structure to run the functions and return outputs - 
+For all files I recommend checking the Docstring for further information about the input variables
+
+
+if __name__ == '__main__':
+      
+    ExampleCase = EEG_Implement_Welch('/Users/mason/Downloads/Example_EEG.txt') 
+    #Copy the path of the EEG file and input it. Make sure the data is COMPLETE, IE: 1-512 timesteps of each trial is recorded in order
+    #See "Example_EEG" to see how this should be set up
+    #The path for this file should be copied from wherever the file is and placed into the call input
+
+    CMRO2Case = plot_normalized_gamma_across_channels(EEG_Welch_Spectra = ExampleCase[0], ElectrodeList=['Fp1', 'Fp2', 'F3', 'F4', 'T5', 'T6', 'O1', 'O2', 'F7', 'F8', 'C3', 'C4', 'T3', 'T4', 'P3', 'P4'], Trials = ExampleCase[1])
+    #ExampleCase[0] is the actual frequency data that is used to characterize the bands, ExampleCase[1] is the number of Trials per EEG raw file   
+
+    NeurovascularDataset = calculate_neurovascular_variables(CMRO2Case)
+    #This is a dictionary object that includes all chemical concentration outputs from the Rothman equations. 
+
+    #-- All above Calls should be set up in a single way, the below method can be changed multiple times with no changes needed to the above methods --#
+    #-- This will be where all data outputs for validation testing and visualization of the methods will be contained within --#
+    
+    A = EEG_Plotting(Data_val = NeurovascularDataset['pO2_cap'], Timestep_Select = 0, NodeNum = 10)
+    # "A" is a standin for whichever chemical dataset you want recorded. In this case it would be "pO2_cap". Number of nodes can go >5000 with a heavy compilation duty.
+    # Suggested nodal amount for "NodeNum" is between 99-1000. Our system had random errors >100 nodes. If this occurs check to make sure your python is updated, as this was an issue we faced.
+    # For selecting the type of dataset, Check the return for calculate_neurovascular_variables, this will include all chemical data you can get plots for
+
+
+    B = A[0]
+    # A[0] contains all chemical outdata as a list, A[1] includes all coordinate data for the coordinating A[0] index. This setup was used for the histogram to determine change per timestep.
